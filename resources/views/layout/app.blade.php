@@ -70,7 +70,7 @@
   <style>
     .contenedor_principal{
       display: grid;
-      grid-template-columns: 14% 85%;
+      grid-template-columns: 20% 70%;
       width: 100vw;
       height: 100vh;
     }

@@ -1,0 +1,36 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.contenerdor{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: brown;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.formulario{
+    width: 400px;
+    height:auto;
+    padding: 10px;
+    border-radius: 10px;
+
+    box-shadow: 5px 5px rgba(0, 0, 0, .5);
+}
+
+h4{
+    color:#ffffff!important;
+}
+
+.boton-conten{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}

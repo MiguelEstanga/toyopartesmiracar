@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductoFactura;
 use Illuminate\Http\Request;
-
+use App\Models\Producto;
+use App\Models\Comprar;
 class ProductoFacturaController extends Controller
 {
     /**
@@ -12,28 +13,48 @@ class ProductoFacturaController extends Controller
      */
     public function index()
     {
-        //
+        $producto = Producto::all();
+        return view("compras.index" , ['productos' => $producto]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $producto = Producto::find($request->id);
+        if($request->cantidad == 0 || $request->cantidad < 0 )
+        {
+            return back()->with("mensage" , "cantidad tiene que ser un numero por arriba de 0");
+        }
+        $producto->precio = $request->precio;
+        $producto->stop = $request->cantidad;
+        $producto->save();
+        Comprar::create([
+               "cantidad" => $request->cantidad,
+               "precio" => $request->precio,
+               "producto" => $request->producto,
+               "total" => $request->precio * $request->cantidad,
+               "fecha" =>  Date("Y-m-d")
+        ]);
+
+        return back()->with("mensage","Se ha actulizado el inventario");
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function facturas(Request $request)
+    {
+        if($request->all()){
+
+            $producto = Comprar::where("fecha" , $request->fecha)->get();
+           $producto;
+        }else{
+            $producto = Comprar::all();
+        }
+        return view("compras.facturas", ["facturas" => $producto ]);
+    }
+
+
     public function show(ProductoFactura $productoFactura)
     {
         //
