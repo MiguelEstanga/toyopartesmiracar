@@ -1,12 +1,10 @@
 body{
-    background-color:  #d35400 ;
+    background-color:#ffffff!important;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.contenedor_principal{
 
-}
 
 .action{
     display: flex;
@@ -59,7 +57,7 @@ font-size: 15px;
 }
 
 .contenerdor {
-    background-color: '#FDFEFE';
+    background-color:;
     margin: 100px auto;
     max-width: 1200px;
 }

@@ -27,7 +27,7 @@
                       <div class="action" >
 
                         <a href="{{route('producto.show' , $producto->id )}}" class=" btn-action">Editar</a>
-                        <a href="#" class=" btn-action">Eliminar</a>
+                        <!--a href="#" class=" btn-action">Eliminar</a-->
                       </div>
                     </div>
                 </div>

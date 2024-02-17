@@ -22,4 +22,10 @@ class AuthController extends Controller
         return back()->with("mensage" , "credenciales incorrectas");
         return $request->all();
     }
+
+    public function Logout()
+    {
+        Auth::logout();
+        return redirect()->route("login");
+    }
 }

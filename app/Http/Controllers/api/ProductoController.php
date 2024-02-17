@@ -46,57 +46,67 @@ class ProductoController extends Controller
 
     public function compra( Request $request)
     {
-        $productos  = $request->productos;
-        $productoBd;
-        $id_factura =  $this->factura(
-            $request->usuario,
-            $request->referencia,
-            $request->banco
-        );
-
-        foreach($productos as $producto){
-           $productoBd = Producto::find($producto['id']);
-           if($productoBd->stop > 0 )
-           {
-                $productoBd->cantidad_vendida = $productoBd->cantidad_vendida + $producto['cantidad'];
-                $productoBd->stop = $productoBd->stop - $producto['cantidad'];
-                $productoBd->save();
-                $this->Producto_factura(
-                    $id_factura->id,
-                    $productoBd->id,
-                    $producto['precio'] ,
-                    $producto['cantidad']
+        //return $request->all();
+        try{
+                $productos  = $request->productos;
+                $productoBd;
+                $id_factura =  $this->factura(
+                    $request->usuario,
+                    $request->referencia,
+                    $request->banco
                 );
-           }else{
-            return response()
-                ->json([
-                    'mensage' => 'El siguiente producto esta agotado "'.$productoBd->nombre.'" por favor saquelo del carrito para continuar',
-                    'success' => '426'
-                ]);
-           }
+
+                foreach($productos as $producto){
+                $productoBd = Producto::find($producto['id']);
+                if($productoBd->stop > 0 )
+                {
+                        $productoBd->cantidad_vendida = $productoBd->cantidad_vendida + $producto['cantidad'];
+                        $productoBd->stop = $productoBd->stop - $producto['cantidad'];
+                        $productoBd->save();
+                        $this->Producto_factura(
+                            $id_factura->id,
+                            $productoBd->id,
+                            $producto['precio'] ,
+                            $producto['cantidad']
+                        );
+                }else{
+                    return response()
+                        ->json([
+                            'mensage' => 'El siguiente producto esta agotado "'.$productoBd->nombre.'" por favor saquelo del carrito para continuar',
+                            'success' => '400'
+                        ]);
+                }
 
 
 
-        }
-        //$factura  = $this->factura();
-        return response()->json(
-            [
-                'mensage' => 'Su factura fue procesada con exito, un administrador verificara el pago esto tardara 24h antes de darle una respuesta',
-                'data'  => $request->all(),
-                'success' => 200
-            ]
-        );
+                }
+                //$factura  = $this->factura();
+                return response()->json(
+                    [
+                        'mensage' => 'Su compra fue procesada con éxito, un administrador verificará su pago.',
+                        'data'  => $request->all(),
+                        'success' => 200
+                    ]
+                );
+        }catch(error $error){
+            return response()->json([
+                'mensage' => $error,
+                'success' => '400'
+            ]);
+    }
 
     }
 
-    public function factura_producto()
+    public function factura_producto($id)
     {
-        $usuario = User::find(1);
+        $usuario = User::find($id);
         return $usuario->facturas;
     }
 
     public function usuario_productos($id)
     {
+        $usuario = User::find($id);
+
         $factura = Fatura::find($id);
         $productos = $factura->producto_factura;
         $p;
@@ -107,5 +117,12 @@ class ProductoController extends Controller
         }
         return $p;
 
+    }
+
+    public function MasVendidos(){
+        $mas_vendido = $productosMasVendidos = Producto::orderBy('cantidad_vendida', 'desc')
+            ->limit(5)
+            ->get();
+        return $mas_vendido;
     }
 }

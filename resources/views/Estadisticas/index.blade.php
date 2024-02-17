@@ -7,6 +7,9 @@
 
     <div class="canvas">
         <canvas id="myChart"></canvas>
+        <div class="center">
+            <a class="btn btn-primary">Generar reporte</a>
+        </div>
     </div>
 
 </section>
@@ -41,6 +44,18 @@
 
 
 <style>
+    .center{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 50px;
+    }
+    .center a{
+        padding: 50px!impostant;
+        width:200px;
+        height:40px;
+        font-size:20px;
+    }
     .canvas{
 
         width: 100%;

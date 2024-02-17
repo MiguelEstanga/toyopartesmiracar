@@ -10,8 +10,6 @@
 
         <th scope="col">Nombre del artículo</th>
         <th scope="col">Cantidad vendida</th>
-
-        <th scope="col">Cantidad</th>
         <th scope="col">Precio unitario</th>
         <th scope="col">Total</th>
       </tr>
@@ -22,18 +20,17 @@
         @endphp
         @foreach ( $productos as $producto )
             <tr>
-            <th scope="row">1</th>
             <td>
-                {{$producto->producto->nombre}}
+                {{$producto["nombre"]}}
             </td>
             <td>
-                {{$producto->cantidad}}
+                {{$producto["cantidad"]}}
             </td>
             <td>
-                {{$producto->precio}}
+                {{$producto["precio"]}}
             </td>
             <td>
-                {{$producto->total}}
+                {{$producto["total"]}}
             </td>
           </tr>
         @endforeach
@@ -47,38 +44,59 @@
         </tr>
         <tr>
 
-            <td colspan="4">Total</td>
+            <td colspan="2">Total</td>
             <td>{{$total}}</td>
         </tr>
         <tr>
-            <td colspan="4">Estado</td>
+            <td colspan="2">Estado</td>
             <td>{{$estado}}</td>
         </tr>
         <tr>
-            <td colspan="4">Cliente</td>
+            <td colspan="2">Cliente</td>
             <td>{{$usuario}}</td>
         </tr>
         <tr>
-            <td colspan="4">Fecha</td>
+            <td colspan="2">Fecha</td>
             <td>{{$fecha}}</td>
         </tr>
         <tr>
-            <td colspan="4">Número de referencia</td>
-            <td>{{$numero}}</td>
+            <td colspan="2">Número de referencia</td>
+            <td>{{$referencia}}</td>
         </tr>
         <tr>
-            <td colspan="4">Banco</td>
+            <td colspan="2">Banco</td>
             <td>{{$banco}}</td>
         </tr>
         <tr>
-            <td colspan="4">Acción</td>
+            <td colspan="2">Acción</td>
             <td>
                 <form action="{{route('facturas.actulizar' , $factura_id)}}" method="POST">
                     @csrf
                     @method('PUT')
-                    <button href="" class="btn btn-primary" >
-                        Aprobar o rechazar
-                    </button>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select name="estado" class="form-control" >
+                                @foreach ( $estados as $_estado )
+                                    <option
+                                        value="{{$_estado->id}}"
+                                        {{
+                                            $_estado->id == $estado_id ? "selected" :""
+                                        }}
+
+                                    >
+                                        {{$_estado->estados}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button href="" class="btn btn-primary" >
+                                Enviar
+                            </button>
+                        </div>
+
+                    </div>
+
                 </form>
 
             </td>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Fatura;
 use App\Models\User;
 use App\Models\ProductoFactura;
+use App\Models\Estado;
 class FacturaController extends Controller
 {
    public function index(){
@@ -16,51 +17,48 @@ class FacturaController extends Controller
 
    public function productos($id)
    {
-        $productos = ProductoFactura::where('factura_id' , $id)->get();
-        $total = 0;
+    $factura = Fatura::find($id);
+    //return response()->json($factura->producto_factura);
+    $total = 0;
+    $productos;
+    foreach($factura->producto_factura as $producto)
+    {
+        //$total = $total + $producto->precio;
+        $total = $producto->total + $total;
+        $productos[] =
+            [
+                'nombre' => $producto->producto->nombre,
+                'imagen' => $producto->producto->imagen,
+                "precio" => $producto->producto->precio,
+                "cantidad" => $producto->cantidad,
+                "total" => $producto->total,
 
-        if($productos){
-            $usuario = $productos[0]->factura->usuario->name . ' ' . $productos[0]->factura->usuario->apellidos;
-            $fecha =  $productos[0]->factura->created_at ;
-            $numero_de_tranferencia =  $productos[0]->factura->referencia;
-            $banco                  =  $productos[0]->factura->banco;
-            $factura_id                  =  $productos[0]->factura->id;
-            $factura = Fatura::find($factura_id);
-             $estado = $factura->estado->estados;
-
-            for($i = 0 ; $i < count($productos) ; $i++ )
-                {
-                    $total = $total + $productos[$i]->total ;
-                }
+            ]
+              ;
         }
-
-
-
-        //return $productos;
 
         return view('facturas.show' ,
             [
-                'productos' => $productos ,
-                'total'     => $total,
-                'estado'    => $estado,
-                'usuario'   => $usuario,
-                'fecha'     => $fecha,
-                'numero'    => $numero_de_tranferencia,
-                'banco'     => $banco,
-                'factura_id'=> $factura_id
+                'productos' => $productos,
+                "fecha" => $factura->created_at,
+                "referencia" => $factura->referencia ,
+                "banco" => $factura->banco,
+                "estado" => $factura->estado->estados,
+                "estado_id" =>  $factura->estado->id,
+                "total" => $total,
+                "usuario" => 1,
+                "factura_id" => $factura->id,
+                "estados" => Estado::all() ?? []
             ]);
    }
 
-   public function actulizar_estado($id)
+   public function actulizar_estado($id , Request $request)
    {
-       $factura = Fatura::find($id);
-       if($factura->id_estado == 2)
-       {
-        $factura->id_estado = 1;
-       }else{
-        $factura->id_estado = 2;
-       }
 
+       $estado = Estado::where("id" , $request->estado)->first();
+       $factura = Fatura::find($id);
+
+       $factura->id_estado = $estado->id;
        $factura->save();
 
       return back();
@@ -70,34 +68,48 @@ class FacturaController extends Controller
    public function misCompras($id)
    {
      $user = User::find($id);
-     return  $user->facturas;
+     $facturas = [];
+     foreach($user->facturas as  $factura)
+     {
+        $fecha = explode('t', $factura->created_at);
+        $facturas [] = [
+            "id" => $factura->id,
+            "estado" => $factura->estado->estados,
+            "fecha" =>   $fecha[0]
+        ];
+     }
+     return  response()->json($facturas);
    }
 
    public function productoAPi($id)
    {
-        $productos = ProductoFactura::where('factura_id' , $id)->get();
-
-        $factura;
-        foreach($productos as $producto)
+        $factura = Fatura::find($id);
+        //return response()->json($factura->producto_factura);
+        $total = 0;
+        $productos;
+        foreach($factura->producto_factura as $producto)
         {
-            $factura[] =
+            //$total = $total + $producto->precio;
+            $total = $producto->total + $total;
+            $productos[] =
                 [
-                    'fecha' => $producto->created_at,
                     'nombre' => $producto->producto->nombre,
-                    'precio' =>  $producto->producto->precio,
-                    'imagen' =>  $producto->producto->imagen,
-                    'toal'   =>  $producto->total,
-                    'cantidad' => $producto->cantidad
+                    'imagen' => $producto->producto->imagen,
+                    "precio" => $producto->producto->precio,
+                    "cantidad" => $producto->cantidad,
+                    "total" => $producto->total
                 ]
             ;
         }
 
-
         return response()->json(
             [
-                'estado' => $productos[0]->factura->estado->estados,
-                'productos' => $factura,
-                'fecha' => $producto->created_at
+                'productos' => $productos,
+                "facha" => $factura->created_at,
+                "referencia" => $factura->referencia ,
+                "banco" => $factura->banco,
+                "estado" => $factura->estado->estados,
+                "total" => $total
             ]
         );
     }

@@ -6,6 +6,11 @@
                     Inicio
                 </a>
             </li>
+            <li class="{{ request()->is('crear_usuario') ? 'active' : '' }}">
+                <a href="{{ route('usuario.create') }}">
+                    Registrar usuario
+                </a>
+            </li>
             <li class="{{ request()->is('compras') ? 'active' : '' }}">
                 <a href="{{ route('compras.index') }}">
                     Comprar producto
@@ -13,7 +18,7 @@
             </li>
             <li class="{{ request()->is('compras/mis_compras*') ? 'active' : '' }}">
                 <a href="{{ route('compras.facturas') }}">
-                    Facturas de compras
+                    Compras de inventario
                 </a>
             </li>
             <li class="{{ request()->is('productos*') ? 'active' : '' }}">
@@ -29,7 +34,6 @@
             <li class="{{ request()->is('usuarios*') ? 'active' : '' }}">
                 <a href="{{ route('usuario.index') }}">
                     Usuarios
-
                 </a>
             </li>
             <li class="{{ request()->is('facturas*') ? 'active' : '' }}">
@@ -42,11 +46,16 @@
                     Reporte
                 </a>
             </li>
+            <li >
+                <a href="{{ route('out') }}">
+                    Cerrar sesión
+                </a>
+            </li>
         </ul>
     </nav>
     <style>
         nav {
-            background-color: #d35400;
+            background-color: #a93226;
             height: 100vh;
             width: 100%;
             display: flex;

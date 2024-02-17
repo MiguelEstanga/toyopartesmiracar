@@ -2,7 +2,7 @@
 @section('contenido')
 <section class="container margin">
 
-    <x-titulo titulo="Usuarios registrados desde la app" />
+    <x-titulo titulo="Usuarios registrados desde la aplicación" />
     <div class="contenedor">
         <table class="table" >
             <thead>

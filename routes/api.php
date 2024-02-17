@@ -22,7 +22,7 @@ use App\Http\Controllers\FacturaController;
 Route::get('productos' ,  function(){
     return json_encode( Producto::all() );
 }  );
-
+Route::get("mas_vendidos" , [ProductoController::class , "MasVendidos"]);
 
 Route::get('productos/{id}' ,  function($id)
 {
@@ -35,9 +35,8 @@ Route::get('productos/{id}' ,  function($id){
 
 
 Route::post('/registro', function(Request $request){
-    return $request->all();
-
-    $verificar_usuario = User::where('email', $request->correo)->first();
+   // return response()->json($request->correo);
+    $verificar_usuario = User::where('email', $request->correo)->exists();
 
     if($verificar_usuario){
         return response()->json([
@@ -47,16 +46,13 @@ Route::post('/registro', function(Request $request){
     }
 
    $usuario =  User::create([
-        "name" => $request->nombre,
+        "name" => $request->nombres." ".$request->apellidos,
         'email' => $request->correo,
         "cedula" => $request->cedula,
-        "telefono" => $request->apellidos,
-        "ciudad" => $request->ciudad,
+        "telefono" => $request->telefono,
+        "ciudad" => $request->direccion,
         "password" =>  Hash::make( $request->password )
     ])->assignRole("Usuario");
-
-
-    //return 0;
 
     return response()
         ->json([
@@ -71,7 +67,7 @@ Route::post('/login' , [AuthController::class , 'login'] );
 
 
 Route::post('/compra',[ProductoController::class , 'compra']);
-Route::get('/mis_compras',[ProductoController::class , 'factura_producto']);
+//Route::get('/mis_compras/{id}',[ProductoController::class , 'factura_producto']);
 Route::get('/factura_producto/{id}',[ProductoController::class , 'usuario_productos']);
 
 //facturas

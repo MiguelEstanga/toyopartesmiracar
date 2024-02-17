@@ -17,23 +17,18 @@ class ProductoFactura extends Model
         'cantidad'
     ];
 
-    public function productos()
-    {
-        return $this->hasMany(Producto::class , 'id') ;
-    }
-
     public function producto()
     {
-        return $this->belongsto(Producto::class ) ;
+        return $this->belongsTo(Producto::class , 'producto_id') ;
     }
 
     public function estado()
     {
-        return $this->belongsTo(Estado::class) ;
+        return $this->belongsTo(Estado::class , "id") ;
     }
 
     public function factura()
     {
-      return $this->belongsto(Fatura::class ,'id' ) ;
+      return $this->belongsto(Fatura::class ,'factura_id' ) ;
     }
 }

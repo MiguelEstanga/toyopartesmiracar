@@ -23,6 +23,7 @@ use \App\Http\Controllers\Categoria\CategoriaController;
 */
 Route::get("/" , [AuthController::class , 'login'])->name('login');
 route::post('/auth' , [AuthController::class, 'auth'  ])->name('auth');
+Route::get('/out' , [AuthController::class, 'Logout'  ])->name('out');
 
 Route::middleware(['can:superadmin'])->group(function () {
     route::get('/crearproducto' , [PanelController::class, 'index'  ])->name('panelAdmin.index');

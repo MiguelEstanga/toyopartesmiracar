@@ -57,7 +57,7 @@
         </div>
       </nav-->
       <section class="contenedor_principal" >
-        <div>
+        <div >
             <x-menu/>
         </div>
         <section class="contenido">
@@ -70,7 +70,7 @@
   <style>
     .contenedor_principal{
       display: grid;
-      grid-template-columns: 20% 70%;
+      grid-template-columns: 20% 80%;
       width: 100vw;
       height: 100vh;
     }

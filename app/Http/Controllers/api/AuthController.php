@@ -41,4 +41,6 @@ class AuthController extends Controller
 
         return json_encode($request->all());
     }
+
+
 }
